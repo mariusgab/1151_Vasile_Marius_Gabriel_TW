@@ -53,7 +53,7 @@ app.get('/data', async (req, res) => {
         let { data: users } = await axios.get("https://jsonplaceholder.typicode.com/users");
 
         await users.forEach(async (item) => {
-            await User.create({ username: item.username, id: item.id })
+            await User.upsert({ username: item.username, id: item.id })
         });
         let data = await User.findAll()
         res.status(201).json(data)
