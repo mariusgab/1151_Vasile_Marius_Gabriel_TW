@@ -1,5 +1,4 @@
-const SERVER = `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
-
+const SERVER = process.env.NODE_ENV == "development" ? `http://localhost:8080` : `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
 
 export function getData() {
     return async dispatch => {
