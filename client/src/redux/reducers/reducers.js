@@ -1,13 +1,20 @@
 const INITIAL_STATE = {
-    data : []
+    playlists : [],
+    selectedPlaylist: null,
+    songs: []
 }
 
 export default function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
-        case 'GET_DATA':
+        case 'SELECT_PLAYLIST':
             return {
                 ...state,
-                data: action.payload
+                selectedPlaylist: action.payload
+            }
+        case 'GET_PLAYLISTS':
+            return {
+                ...state,
+                playlists: action.payload
             }
         default:
             return {

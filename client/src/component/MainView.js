@@ -2,38 +2,89 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from "../redux/actions";
+import ListItem from '@mui/material/ListItem';
 import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import { Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import AddPlaylistView from './AddPlaylist';
+import AddSongView from './AddSong';
 
 function MainView() {
     const dispatch = useDispatch();
-    const { getData } = bindActionCreators(actions, dispatch);
+    const { getPlaylists } = bindActionCreators(actions, dispatch);
     const state = useSelector((state) => state.data);
 
+    const [openAddPlaylistView, setOpenAddPlaylistView] = useState(false);
+    const [openAddSongView, setOpenAddSongView] = useState(false);
+
     useEffect(() => {
-        getData();
+        getPlaylists();
     }, []);
 
     return (
         <Box id="main_view_container">
-            <div className="container">
-                <h3 className="p-3 text-center">React - Display a list of items</h3>
-                <table className="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {state.data && state.data.map(user =>
-                            <tr key={user.username}>
-                                <td>{user.username}</td>
-                            </tr>
+            <Grid container spacing={2}>
+                <Grid item xs={3}>
+                    <Typography fontWeight="bold" fontSize="30px" padding="16px">Playlists</Typography>
+                    <List>
+                        <Button variant="text" onClick={() => {
+                            setOpenAddPlaylistView(true);
+                        }}>
+                            <Typography fontWeight="bold" fontSize="15px" padding="8px">+ Add new playlist</Typography>
+                        </Button>
+
+                        {state.playlists && state.playlists.map(playlist =>
+                            <ListItem>
+                                <Typography>{playlist.descriere}</Typography>
+                            </ListItem>
                         )}
-                    </tbody>
-                </table>
-            </div>
+                    </List>
+                </Grid>
+                <Grid item xs={9}>
+                    <Typography fontWeight="bold" fontSize="30px" padding="16px">Songs</Typography>
+                    <List>
+                        <Button variant="text" onClick={() => {
+                            setOpenAddSongView(true);
+                        }}>
+                            <Typography fontWeight="bold" fontSize="15px" padding="8px">+ Add new song</Typography>
+                        </Button>
+
+                        {state.songs && state.songs.map(song =>
+                            <ListItem>
+                                <Typography>{song.titlu}</Typography>
+                                <Typography>{song.url}</Typography>
+                                <Typography>{song.stil}</Typography>
+                            </ListItem>
+                        )}
+                    </List>
+                </Grid>
+            </Grid>
+
+            {openAddPlaylistView &&
+                <AddPlaylistView
+                    open={openAddPlaylistView}
+                    onClick={() => {
+                        setOpenAddPlaylistView(true);
+                    }}
+                    handleClose={() => setOpenAddPlaylistView(false)}
+                />
+            }
+
+            {openAddSongView &&
+                <AddSongView
+                    open={openAddSongView}
+                    onClick={() => {
+                        setOpenAddSongView(true);
+                    }}
+                    playlistId={state.selectedPlaylist.id}
+                    handleClose={() => setOpenAddSongView(false)}
+                />
+            }
         </Box>
-        
+
     );
 }
 
