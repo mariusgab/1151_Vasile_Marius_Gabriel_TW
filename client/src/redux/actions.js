@@ -12,15 +12,40 @@ export function selectPlaylist(playlist) {
     }
 }
 
-export function getPlaylists() {
+export function selectSong(song) {
+    return async dispatch => {
+        // let response = await fetch(`${SERVER}/playlists`);
+        // let json = await response.json()
+
+        dispatch({
+            type: 'SELECT_SONG',
+            payload: song
+        })
+    }
+}
+
+export function getPlaylists(isFirst) {
     return async dispatch => {
         let response = await fetch(`${SERVER}/playlists`);
         let json = await response.json()
 
-        dispatch({
-            type: 'GET_PLAYLISTS',
-            payload: json
-        })
+        if (Object.keys(json).length === 0) {
+            dispatch({
+                type: 'GET_PLAYLISTS',
+                payload: []
+            })
+        }
+        else {
+            dispatch({
+                type: 'GET_PLAYLISTS',
+                payload: json
+            })
+
+            dispatch({
+                type: 'SELECT_PLAYLIST',
+                payload: json[0]
+            })
+        }
     }
 }
 
@@ -43,6 +68,64 @@ export function postPlaylist(playlist) {
     }
 }
 
+export function updatePlaylist(playlist) {
+    return async dispatch => {
+        let response = await fetch(`${SERVER}/playlists/${playlist.id}`, {
+            method: 'update',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(playlist)
+        })
+
+        let json = await response.json()
+
+        dispatch({
+            type: 'UPDATE_PLAYLIST',
+            payload: json
+        })
+    }
+}
+
+export function deletePlaylist(playlistId) {
+    return async dispatch => {
+        let response = await fetch(`${SERVER}/playlists/${playlistId}`, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+
+        let json = await response.json()
+
+        dispatch({
+            type: 'DELETE_PLAYLIST',
+            payload: json
+        })
+    }
+}
+
+export function getSongs(playlistId) {
+    return async dispatch => {
+        let response = await fetch(`${SERVER}/songs/${playlistId}`);
+        let json = await response.json()
+
+        if (Object.keys(json).length === 0) {
+            dispatch({
+                type: 'GET_SONGS',
+                payload: []
+            })
+        }
+        else {
+            dispatch({
+                type: 'GET_SONGS',
+                payload: json
+            })
+        }
+
+    }
+}
+
 export function postSong(song, playlistId) {
     return async dispatch => {
         let response = await fetch(`${SERVER}/songs/${playlistId}`, {
@@ -57,6 +140,24 @@ export function postSong(song, playlistId) {
 
         dispatch({
             type: 'POST_SONG',
+            payload: json
+        })
+    }
+}
+
+export function deleteSong(songId) {
+    return async dispatch => {
+        let response = await fetch(`${SERVER}/songs/${songId}`, {
+            method: 'delete',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+
+        let json = await response.json()
+
+        dispatch({
+            type: 'DELETE_SONG',
             payload: json
         })
     }

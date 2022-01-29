@@ -108,7 +108,7 @@ app.post('/playlists', async (req, res) => {
 });
 
 app.put('/playlists/:id', async (req, res) => {
-    let playlist = await Playlist.findByPk(req.params.id);
+    let playlist = await Playlist.findByPk(req.params.id, { include: ["songs"] });
     if (playlist) {
         await playlist.update(req.body);
     }
@@ -140,12 +140,8 @@ app.delete('/playlists/:id', async (req, res) => {
 
 app.get('/songs/:playlistId', async (req, res) => {
     try {
-        const songs = Song.findAll({
-            where: {
-                playlistId: req.params.playlistId
-            }
-        });
-        res.status(201).json(songs)
+        let playlist = await Playlist.findByPk(req.params.playlistId, { include: ["songs"] });
+        res.status(201).json(playlist)
     }
     catch (e) {
         console.warn(e)
@@ -157,8 +153,8 @@ app.get('/songs/:playlistId', async (req, res) => {
 app.post('/songs/:playlistId', async (req, res) => {
     try {
         await Song.create({ ...req.body, playlistId: req.params.playlistId })
-        let playlists = await Playlist.findAll({ include: ["songs"] })
-        res.status(201).json(playlists)
+        let playlist = await Playlist.findByPk(req.params.playlistId, { include: ["songs"] });
+        res.status(201).json(playlist)
     }
     catch (e) {
         console.warn(e)
@@ -166,9 +162,10 @@ app.post('/songs/:playlistId', async (req, res) => {
     }
 });
 
-app.put('/songs/:id/:playlistId', async (req, res) => {
+app.put('/songs/:id', async (req, res) => {
     try {
         let song = await Song.findByPk(req.params.id);
+        let playlistId = song.playlistId
         if (song) {
             await song.update(req.body);
         }
@@ -176,8 +173,8 @@ app.put('/songs/:id/:playlistId', async (req, res) => {
             res.status(404).json({ message: "song not found" });
         }
 
-        let playlists = await Playlist.findAll({ include: ["songs"] })
-        res.status(201).json(playlists)
+        let playlist = await Playlist.findByPk(playlistId, { include: ["songs"] });
+        res.status(201).json(playlist)
     }
     catch (e) {
         console.warn(e)
@@ -185,15 +182,16 @@ app.put('/songs/:id/:playlistId', async (req, res) => {
     }
 });
 
-app.delete('/songs/:id/:playlistId', async (req, res) => {
+app.delete('/songs/:id/', async (req, res) => {
     try {
         let song = await Song.findByPk(req.params.id)
+        let playlistId = song.playlistId
         if (song) {
             await song.destroy();
         }
 
-        let playlists = await Playlist.findAll({ include: ["songs"] })
-        res.status(201).json(playlists)
+        let playlist = await Playlist.findByPk(playlistId, { include: ["songs"] });
+        res.status(201).json(playlist)
     }
     catch (e) {
         console.warn(e)

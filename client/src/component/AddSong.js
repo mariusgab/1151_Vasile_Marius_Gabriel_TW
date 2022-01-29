@@ -35,7 +35,7 @@ function AddSongView(props) {
             const song = {
                 titlu: titlu,
                 url: url,
-                stil: stil
+                stil: "pop"
             };
             postSong(song, props.playlistId);
 

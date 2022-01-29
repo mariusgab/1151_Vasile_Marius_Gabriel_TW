@@ -11,17 +11,19 @@ import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import AddPlaylistView from './AddPlaylist';
 import AddSongView from './AddSong';
+import PlaylistItemView from './PlayListItem';
+import SongItemView from './SongItem';
 
 function MainView() {
     const dispatch = useDispatch();
-    const { getPlaylists } = bindActionCreators(actions, dispatch);
+    const { getPlaylists, selectPlaylist } = bindActionCreators(actions, dispatch);
     const state = useSelector((state) => state.data);
 
     const [openAddPlaylistView, setOpenAddPlaylistView] = useState(false);
     const [openAddSongView, setOpenAddSongView] = useState(false);
 
-    useEffect(() => {
-        getPlaylists();
+    useEffect(async () => {
+        getPlaylists(true);
     }, []);
 
     return (
@@ -37,9 +39,9 @@ function MainView() {
                         </Button>
 
                         {state.playlists && state.playlists.map(playlist =>
-                            <ListItem>
-                                <Typography>{playlist.descriere}</Typography>
-                            </ListItem>
+                            <PlaylistItemView key={playlist.id} playlist={playlist} openEditPlaylist={() => {
+
+                            }} />
                         )}
                     </List>
                 </Grid>
@@ -47,17 +49,20 @@ function MainView() {
                     <Typography fontWeight="bold" fontSize="30px" padding="16px">Songs</Typography>
                     <List>
                         <Button variant="text" onClick={() => {
-                            setOpenAddSongView(true);
+                            if (state.selectedPlaylist != null) {
+                                setOpenAddSongView(true);
+                            }
+                            else {
+                                alert("No playlist selected!")
+                            }
                         }}>
                             <Typography fontWeight="bold" fontSize="15px" padding="8px">+ Add new song</Typography>
                         </Button>
 
-                        {state.songs && state.songs.map(song =>
-                            <ListItem>
-                                <Typography>{song.titlu}</Typography>
-                                <Typography>{song.url}</Typography>
-                                <Typography>{song.stil}</Typography>
-                            </ListItem>
+                        {state.selectedPlaylist && state.selectedPlaylist.songs && state.selectedPlaylist.songs.map(song =>
+                            <SongItemView key={song.id} song={song} openEditSong={() => {
+
+                            }} />
                         )}
                     </List>
                 </Grid>

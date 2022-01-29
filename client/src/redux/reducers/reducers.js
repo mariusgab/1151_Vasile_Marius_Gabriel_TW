@@ -1,7 +1,7 @@
 const INITIAL_STATE = {
-    playlists : [],
+    playlists: [],
     selectedPlaylist: null,
-    songs: []
+    selectedSong: null,
 }
 
 export default function reducer(state = INITIAL_STATE, action) {
@@ -16,6 +16,45 @@ export default function reducer(state = INITIAL_STATE, action) {
                 ...state,
                 playlists: action.payload
             }
+
+        case 'POST_PLAYLIST':
+            return {
+                ...state,
+                playlists: action.payload
+            }
+        case 'UPDATE_PLAYLIST':
+            return {
+                ...state,
+                playlists: action.payload
+            }
+        case 'DELETE_PLAYLIST':
+            return {
+                ...state,
+                playlists: action.payload
+            }
+
+        case 'SELECT_SONG':
+            return {
+                ...state,
+                selectedSong: action.payload
+            }
+        case 'GET_SONGS':
+            return {
+                ...state,
+                selectedPlaylist: action.payload
+            }
+        case 'POST_SONG':
+            return {
+                ...state,
+                selectedPlaylist: action.payload
+            }
+        case 'DELETE_SONG':
+            return {
+                ...state,
+                selectedPlaylist: action.payload
+            }
+
+
         default:
             return {
                 ...state,
