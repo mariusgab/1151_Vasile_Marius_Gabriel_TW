@@ -2,6 +2,7 @@ const INITIAL_STATE = {
     playlists: [],
     selectedPlaylist: null,
     selectedSong: null,
+    sortAscending: true
 }
 
 export default function reducer(state = INITIAL_STATE, action) {
@@ -57,6 +58,11 @@ export default function reducer(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 selectedPlaylist: action.payload
+            }
+        case 'SORT':
+            return {
+                ...state,
+                playlists: action.payload
             }
         default:
             return {

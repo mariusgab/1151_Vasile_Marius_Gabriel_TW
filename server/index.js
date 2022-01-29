@@ -5,21 +5,21 @@ const Sequelize = require('sequelize')
 const axios = require("axios")
 const Op = Sequelize.Op
 
-// const sequelize = new Sequelize(process.env.DATABASE_URL, {
-//     dialect: 'postgres',
-//     protocol: 'postgres',
-//     dialectOptions: {
-//         ssl: {
-//             require: true,
-//             rejectUnauthorized: false
-//         }
-//     }
-// })
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    }
+})
 
-const sequelize = new Sequelize('test', 'root', 'password', {
-    dialect: 'mysql',
-    host: 'localhost'
-});
+// const sequelize = new Sequelize('test', 'root', 'password', {
+//     dialect: 'mysql',
+//     host: 'localhost'
+// });
 
 const Playlist = sequelize.define('playlist', {
     id: {
@@ -87,7 +87,7 @@ app.get('/sync', async (req, res) => {
 
 app.get('/playlists', async (req, res) => {
     try {
-        let playlists = await Playlist.findAll({ include: ["songs"] })
+        let playlists = await Playlist.findAll({ include: ["songs"], })
         res.status(201).json(playlists)
     }
     catch (e) {
@@ -239,5 +239,5 @@ app.delete('/songs/:id/', async (req, res) => {
 });
 
 
-// app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));
-app.listen(8080, () => console.log(`Listening on port 8080`));
+app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));
+// app.listen(8080, () => console.log(`Listening on port 8080`));

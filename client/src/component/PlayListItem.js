@@ -38,7 +38,7 @@ function PlaylistItemView(props) {
 
 
                 <ListItemText primary={<div>
-                    <Typography sx={{ color: state.selectedPlaylist.id == playlist.id ? 'red' : 'black', fontWeight: 'bold', }}>
+                    <Typography sx={{ color: state.selectedPlaylist ? state.selectedPlaylist.id == playlist.id ? 'red' : 'black' : 'black', fontWeight: 'bold', }}>
                         {playlist.descriere}
                     </Typography>
                 </div>} style={{ margin: 8 }} />

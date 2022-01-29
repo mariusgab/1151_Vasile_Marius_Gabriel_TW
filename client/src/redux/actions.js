@@ -127,9 +127,16 @@ export function deletePlaylist(playlistId) {
     }
 }
 
-export function sortPlaylists(ascending) {
+export function sortPlaylists(playlists, ascending) {
+    return async dispatch => {
+        dispatch({
+            type: 'SORT',
+            payload: ascending ? playlists.sort((a, b) => a.descriere.toLowerCase() > b.descriere.toLowerCase() ? 1 : -1) : playlists.sort((a, b) => a.descriere.toLowerCase() < b.descriere.toLowerCase() ? 1 : -1)
+        })
+    }
 
 }
+
 export function getSongs(playlistId, query) {
     return async dispatch => {
         let response = await fetch(query ? `${SERVER}/songs/${playlistId}/${query}` : `${SERVER}/songs/${playlistId}`);

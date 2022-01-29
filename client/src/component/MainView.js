@@ -20,7 +20,7 @@ import Stack from '@mui/material/Stack';
 
 function MainView() {
     const dispatch = useDispatch();
-    const { getPlaylists, selectPlaylist, getSongs } = bindActionCreators(actions, dispatch);
+    const { getPlaylists, selectPlaylist, getSongs, sortPlaylists } = bindActionCreators(actions, dispatch);
     const state = useSelector((state) => state.data);
 
     const [openAddPlaylistView, setOpenAddPlaylistView] = useState(false);
@@ -65,11 +65,12 @@ function MainView() {
                                 </TextField>
                             </Box>
 
-                            <IconButton color="primary" aria-label="sort" onClick={() => {
+                            {/* <IconButton color="primary" aria-label="sort" onClick={() => {
                                 setAscendingOrderPlaylist(!ascendingOrderPlaylist);
+                                sortPlaylists(state.playlists, ascendingOrderPlaylist)
                             }}>
                                 <SortIcon />
-                            </IconButton>
+                            </IconButton> */}
                         </Stack>
 
 
@@ -106,11 +107,12 @@ function MainView() {
                                 </TextField>
                             </Box>
 
-                            <IconButton color="primary" aria-label="sort" onClick={() => {
+                            {/* <IconButton color="primary" aria-label="sort" onClick={() => {
                                 setAscendingOrderSong(!ascendingOrderSong);
+
                             }}>
                                 <SortIcon />
-                            </IconButton>
+                            </IconButton> */}
                         </Stack>
 
 
