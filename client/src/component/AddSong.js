@@ -45,6 +45,10 @@ function AddSongView(props) {
     };
 
     const onClickDone = useCallback(async () => {
+        if (props.playlistId == null) {
+            alert("No playlist selected!");
+        }
+
         if (titlu.length > 3) {
             let editingSong = song;
             if (editingSong) {

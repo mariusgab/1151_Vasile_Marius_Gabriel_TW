@@ -22,6 +22,7 @@ function PlaylistItemView(props) {
     const { playlist } = props;
     const dispatch = useDispatch();
     const { selectPlaylist, deletePlaylist, getSongs } = bindActionCreators(actions, dispatch);
+    const state = useSelector((state) => state.data);
 
     return (
         <Box style={{
@@ -37,7 +38,7 @@ function PlaylistItemView(props) {
 
 
                 <ListItemText primary={<div>
-                    <Typography sx={{ fontWeight: 'bold' }}>
+                    <Typography sx={{ color: state.selectedPlaylist.id == playlist.id ? 'red' : 'black', fontWeight: 'bold', }}>
                         {playlist.descriere}
                     </Typography>
                 </div>} style={{ margin: 8 }} />

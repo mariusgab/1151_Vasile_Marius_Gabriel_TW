@@ -14,6 +14,9 @@ import AddSongView from './AddSong';
 import PlaylistItemView from './PlayListItem';
 import SongItemView from './SongItem';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import SortIcon from '@mui/icons-material/Sort';
+import Stack from '@mui/material/Stack';
 
 function MainView() {
     const dispatch = useDispatch();
@@ -29,7 +32,8 @@ function MainView() {
     const [searchPlaylistQuery, setSearchPlaylistQuery] = useState("");
     const [searchSongQuery, setSearchSongQuery] = useState("");
 
-    const [ascendingOrder, setAscendingOrder] = useState(true);
+    const [ascendingOrderPlaylist, setAscendingOrderPlaylist] = useState(true);
+    const [ascendingOrderSong, setAscendingOrderSong] = useState(true);
 
     useEffect(async () => {
         getPlaylists();
@@ -38,7 +42,7 @@ function MainView() {
     return (
         <Box id="main_view_container">
             <Grid container spacing={2}>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <Typography fontWeight="bold" fontSize="30px" padding="16px">Playlists</Typography>
                     <List>
                         <Button variant="text" onClick={() => {
@@ -47,17 +51,26 @@ function MainView() {
                             <Typography fontWeight="bold" fontSize="15px" padding="8px">+ Add new playlist</Typography>
                         </Button>
 
-                        <Box padding="16px">
-                            <TextField id="standard-basic" label="Search playlists" variant="standard"
-                                value={searchPlaylistQuery}
-                                autoComplete='off'
-                                onChange={(event) => {
-                                    setSearchPlaylistQuery(event.target.value);
-                                    getPlaylists(event.target.value);
-                                }}>
-                            </TextField>
-                        </Box>
 
+
+                        <Stack direction="row" spacing={1}>
+                            <Box padding="16px">
+                                <TextField id="standard-basic" label="Search playlists" variant="standard"
+                                    value={searchPlaylistQuery}
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        setSearchPlaylistQuery(event.target.value);
+                                        getPlaylists(event.target.value);
+                                    }}>
+                                </TextField>
+                            </Box>
+
+                            <IconButton color="primary" aria-label="sort" onClick={() => {
+                                setAscendingOrderPlaylist(!ascendingOrderPlaylist);
+                            }}>
+                                <SortIcon />
+                            </IconButton>
+                        </Stack>
 
 
                         {state.playlists && state.playlists.map(playlist =>
@@ -67,7 +80,7 @@ function MainView() {
                         )}
                     </List>
                 </Grid>
-                <Grid item xs={9}>
+                <Grid item xs={8}>
                     <Typography fontWeight="bold" fontSize="30px" padding="16px">Songs</Typography>
                     <List>
                         <Button variant="text" onClick={() => {
@@ -81,16 +94,26 @@ function MainView() {
                             <Typography fontWeight="bold" fontSize="15px" padding="8px">+ Add new song</Typography>
                         </Button>
 
-                        <Box padding="16px">
-                            <TextField id="standard-basic" label="Search songs" variant="standard"
-                                value={searchSongQuery}
-                                autoComplete='off'
-                                onChange={(event) => {
-                                    setSearchSongQuery(event.target.value);
-                                    getSongs(state.selectedPlaylist.id, event.target.value);
-                                }}>
-                            </TextField>
-                        </Box>
+                        <Stack direction="row" spacing={1}>
+                            <Box padding="16px">
+                                <TextField id="standard-basic" label="Search songs" variant="standard"
+                                    value={searchSongQuery}
+                                    autoComplete='off'
+                                    onChange={(event) => {
+                                        setSearchSongQuery(event.target.value);
+                                        getSongs(state.selectedPlaylist.id, event.target.value);
+                                    }}>
+                                </TextField>
+                            </Box>
+
+                            <IconButton color="primary" aria-label="sort" onClick={() => {
+                                setAscendingOrderSong(!ascendingOrderSong);
+                            }}>
+                                <SortIcon />
+                            </IconButton>
+                        </Stack>
+
+
 
                         {state.selectedPlaylist && state.selectedPlaylist.songs && state.selectedPlaylist.songs.map(song =>
                             <SongItemView key={song.id} song={song} openEditSong={() => {
