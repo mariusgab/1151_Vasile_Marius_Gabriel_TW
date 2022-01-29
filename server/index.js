@@ -1,20 +1,24 @@
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
-require('dotenv').config()
 const Sequelize = require('sequelize')
 const axios = require("axios")
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-    dialect: 'postgres',
-    protocol: 'postgres',
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false
-        }
-    }
-})
+// const sequelize = new Sequelize(process.env.DATABASE_URL, {
+//     dialect: 'postgres',
+//     protocol: 'postgres',
+//     dialectOptions: {
+//         ssl: {
+//             require: true,
+//             rejectUnauthorized: false
+//         }
+//     }
+// })
+
+const sequelize = new Sequelize('test', 'root', 'password', {
+    dialect: 'mysql',
+    host: 'localhost'
+});
 
 const User = sequelize.define('user', {
     username: {
@@ -60,4 +64,5 @@ app.get('/data', async (req, res) => {
     }
 });
 
-app.listen(process.env.PORT)
+// app.listen(process.env.PORT, () => console.log(`Listening on port ${process.env.PORT}`));
+app.listen(8080, () => console.log(`Listening on port 8080`));

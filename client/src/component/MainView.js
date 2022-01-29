@@ -13,23 +13,26 @@ function MainView() {
     }, []);
 
     return (
-        <div className="container">
-            <h3 className="p-3 text-center">React - Display a list of items</h3>
-            <table className="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {state.data && state.data.map(user =>
-                        <tr key={user.username}>
-                            <td>{user.username}</td>
+        <Box id="main_view_container">
+            <div className="container">
+                <h3 className="p-3 text-center">React - Display a list of items</h3>
+                <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        {state.data && state.data.map(user =>
+                            <tr key={user.username}>
+                                <td>{user.username}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </Box>
+        
     );
 }
 
