@@ -24,9 +24,9 @@ export function selectSong(song) {
     }
 }
 
-export function getPlaylists(isFirst) {
+export function getPlaylists(query) {
     return async dispatch => {
-        let response = await fetch(`${SERVER}/playlists`);
+        let response = await fetch(query ? `${SERVER}/playlists/${query}` : `${SERVER}/playlists`);
         let json = await response.json()
 
         if (Object.keys(json).length === 0) {
@@ -65,13 +65,18 @@ export function postPlaylist(playlist) {
             type: 'POST_PLAYLIST',
             payload: json
         })
+
+        dispatch({
+            type: 'SELECT_PLAYLIST',
+            payload: json[json.length - 1]
+        })
     }
 }
 
 export function updatePlaylist(playlist) {
     return async dispatch => {
         let response = await fetch(`${SERVER}/playlists/${playlist.id}`, {
-            method: 'update',
+            method: 'put',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -98,16 +103,33 @@ export function deletePlaylist(playlistId) {
 
         let json = await response.json()
 
-        dispatch({
-            type: 'DELETE_PLAYLIST',
-            payload: json
-        })
+        if (Object.keys(json).length === 0) {
+            dispatch({
+                type: 'DELETE_PLAYLIST',
+                payload: []
+            })
+            dispatch({
+                type: 'SELECT_PLAYLIST',
+                payload: null
+            })
+        }
+        else {
+            dispatch({
+                type: 'DELETE_PLAYLIST',
+                payload: json
+            })
+
+            dispatch({
+                type: 'SELECT_PLAYLIST',
+                payload: json[0]
+            })
+        }
     }
 }
 
-export function getSongs(playlistId) {
+export function getSongs(playlistId, query) {
     return async dispatch => {
-        let response = await fetch(`${SERVER}/songs/${playlistId}`);
+        let response = await fetch(query ? `${SERVER}/songs/${playlistId}/${query}` : `${SERVER}/songs/${playlistId}`);
         let json = await response.json()
 
         if (Object.keys(json).length === 0) {
@@ -144,6 +166,26 @@ export function postSong(song, playlistId) {
         })
     }
 }
+
+export function updateSong(song) {
+    return async dispatch => {
+        let response = await fetch(`${SERVER}/songs/${song.id}`, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(song)
+        })
+
+        let json = await response.json()
+
+        dispatch({
+            type: 'UPDATE_SONG',
+            payload: json
+        })
+    }
+}
+
 
 export function deleteSong(songId) {
     return async dispatch => {

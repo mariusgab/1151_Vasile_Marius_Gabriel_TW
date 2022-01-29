@@ -37,7 +37,7 @@ function PlaylistItemView(props) {
 
 
                 <ListItemText primary={<div>
-                    <Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>
                         {playlist.descriere}
                     </Typography>
                 </div>} style={{ margin: 8 }} />
@@ -45,7 +45,9 @@ function PlaylistItemView(props) {
             </ListItemButton>
 
             <IconButton aria-label="edit" onClick={() => {
-                selectPlaylist(playlist)
+                selectPlaylist(playlist);
+                getSongs(playlist.id);
+
                 props.openEditPlaylist()
             }}>
                 <EditIcon />

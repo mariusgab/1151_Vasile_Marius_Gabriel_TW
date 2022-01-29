@@ -53,8 +53,11 @@ export default function reducer(state = INITIAL_STATE, action) {
                 ...state,
                 selectedPlaylist: action.payload
             }
-
-
+        case 'UPDATE_SONG':
+            return {
+                ...state,
+                selectedPlaylist: action.payload
+            }
         default:
             return {
                 ...state,

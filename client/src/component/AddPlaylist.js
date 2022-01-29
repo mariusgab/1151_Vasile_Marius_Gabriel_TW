@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -15,10 +15,18 @@ import Stack from '@mui/material/Stack';
 
 function AddPlaylistView(props) {
     const dispatch = useDispatch();
-    const { postPlaylist } = bindActionCreators(actions, dispatch);
+    const { postPlaylist, updatePlaylist } = bindActionCreators(actions, dispatch);
+
+    const { playlist } = props;
 
     const [descriere, setDescriere] = useState("");
     const [errorText, setErrorText] = useState("");
+
+    useEffect(() => {
+        if (playlist) {
+            setDescriere(playlist.descriere);
+        }
+    }, []);
 
     const close = () => {
         setDescriere("");
@@ -28,11 +36,23 @@ function AddPlaylistView(props) {
 
     const onClickDone = useCallback(async () => {
         if (descriere.length > 3) {
-            const playlist = {
-                descriere: descriere,
-                data: Date.now()
-            };
-            postPlaylist(playlist);
+            let editingPlaylist = playlist;
+
+            if (editingPlaylist) {
+                const playlist = {
+                    descriere: descriere,
+                    data: Date.now(),
+                    id: editingPlaylist.id
+                };
+                updatePlaylist(playlist);
+            }
+            else {
+                const playlist = {
+                    descriere: descriere,
+                    data: Date.now()
+                };
+                postPlaylist(playlist);
+            }
 
             close();
         }
@@ -51,7 +71,7 @@ function AddPlaylistView(props) {
 
                 <Stack>
                     <Box>
-                        <Typography sx={{ fontWeight: 'bold', fontSize: '27px' }} style={{ margin: '16px' }} align="center"> Add New Playlist</Typography>
+                        <Typography sx={{ fontWeight: 'bold', fontSize: '27px' }} style={{ margin: '16px' }} align="center">Add New Playlist</Typography>
 
                         <IconButton
                             aria-label="close"
@@ -72,6 +92,8 @@ function AddPlaylistView(props) {
 
                             <TextField id="standard-basic" label="Descriere" variant="standard"
                                 error={errorText.length <= 3 ? false : true}
+                                value={descriere}
+                                autoComplete='off'
                                 onChange={(event) => {
                                     setDescriere(event.target.value);
                                 }}>

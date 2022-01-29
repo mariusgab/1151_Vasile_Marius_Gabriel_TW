@@ -37,9 +37,9 @@ function SongItemView(props) {
 
 
                 <ListItemText primary={<div>
-                    <Typography>{song.titlu}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{song.titlu}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{song.stil}</Typography>
                     <Link href={song.url}>{song.url}</Link>
-                    <Typography>{song.stil}</Typography>
                 </div>} style={{ margin: 8 }} />
 
             </ListItemButton>

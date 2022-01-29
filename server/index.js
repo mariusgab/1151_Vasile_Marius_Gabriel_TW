@@ -3,6 +3,7 @@ const cors = require('cors')
 const path = require('path')
 const Sequelize = require('sequelize')
 const axios = require("axios")
+const Op = Sequelize.Op
 
 // const sequelize = new Sequelize(process.env.DATABASE_URL, {
 //     dialect: 'postgres',
@@ -95,6 +96,21 @@ app.get('/playlists', async (req, res) => {
     }
 });
 
+app.get('/playlists/:query', async (req, res) => {
+    try {
+        let playlists = await Playlist.findAll({
+            include: ["songs"], where: {
+                descriere: { [Op.like]: `%${req.params.query}%` },
+            },
+        })
+        res.status(201).json(playlists)
+    }
+    catch (e) {
+        console.warn(e)
+        res.status(500).json({ message: e })
+    }
+});
+
 app.post('/playlists', async (req, res) => {
     try {
         await Playlist.create(req.body)
@@ -141,6 +157,29 @@ app.delete('/playlists/:id', async (req, res) => {
 app.get('/songs/:playlistId', async (req, res) => {
     try {
         let playlist = await Playlist.findByPk(req.params.playlistId, { include: ["songs"] });
+        res.status(201).json(playlist)
+    }
+    catch (e) {
+        console.warn(e)
+        res.status(500).json({ message: e })
+    }
+});
+
+
+app.get('/songs/:playlistId/:query', async (req, res) => {
+    try {
+
+        let playlist = await Playlist.findByPk(req.params.playlistId, {
+            include: [
+                {
+                    model: Song,
+                    as: 'songs',
+                    where: {
+                        titlu: { [Op.like]: `%${req.params.query}%` },
+                    },
+                },
+            ],
+        });
         res.status(201).json(playlist)
     }
     catch (e) {
